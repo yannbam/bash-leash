@@ -108,14 +108,15 @@ Can be addressed separately if needed.
 
 This fix is minimal: it fixes what's broken without scope creep.
 
-## Related Issue Found (Separate Fix)
+## Clarification: mv behavior is CORRECT
 
-`mv` is in DANGEROUS_COMMANDS but lacks dest-only checking like `cp` has.
-This means `mv SOURCE DEST` validates BOTH paths, blocking legitimate
-"move from outside to inside" operations.
+Initially thought `mv` should have dest-only checking like `cp`.
+**WRONG!** `mv` deletes the source file, unlike `cp` which just reads.
 
-**Not caused by this fix** - pre-existing.
-**Should be addressed separately** - add same dest-only logic as cp.
+- `cp SOURCE DEST` → source READ (non-destructive) → only check dest ✓
+- `mv SOURCE DEST` → source DELETED → must check both ✓
+
+Current behavior for `mv` is correct. No change needed.
 
 ## Final Verdict
 
